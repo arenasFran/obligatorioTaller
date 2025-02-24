@@ -1,0 +1,133 @@
+/* Fondo general y texto */
+body {
+    color: #2f3640; /* Texto oscuro para contraste y legibilidad */
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Botones personalizados */
+ion-button {
+    --background: #ff7f50; /* Naranja vibrante (energía y acción) */
+    --color: white;
+    --border-radius: 30px; /* Bordes redondeados */
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ion-button:hover {
+    transform: translateY(-4px); /* Desplazamiento sutil en hover */
+    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Sombra más intensa */
+}
+
+/* Estilos para el encabezado */
+ion-header {
+    background-color: #2980b9; /* Azul fuerte y moderno */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Sombra moderna */
+    padding: 10px 0;
+}
+
+
+
+/* Estilos para los items en el menú */
+ion-item {
+    --background: #fff; /* Fondo blanco para claridad */
+    --color: #2f3640; /* Texto oscuro para contraste */
+    border-radius: 8px;
+    margin: 8px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    transition: transform 0.2s ease-in-out;
+}
+
+ion-item:hover {
+    transform: translateX(5px); /* Efecto de desplazamiento */
+    background-color: #ecf0f1; /* Fondo gris claro en hover */
+}
+
+/* Estilo para los badges */
+ion-badge {
+    background-color: #1abc9c; /* Verde brillante (salud y deporte) */
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 25px; /* Bordes redondeados */
+}
+
+/* Tarjetas personalizadas */
+ion-card {
+    --background: #fff;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra ligera y moderna */
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+ion-card:hover {
+    transform: translateY(-5px); /* Efecto de desplazamiento en hover */
+    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más fuerte */
+}
+
+/* Estilo para las imágenes */
+ion-img {
+    border-radius: 12px 12px 0 0; /* Bordes redondeados arriba */
+}
+
+/* Fondo personalizado para el contenido */
+ion-content {
+    background-color: #ecf0f1; /* Gris muy suave */
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* Input y Select personalizados */
+ion-input, ion-select {
+    --background: #fff;
+    --border-radius: 8px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+ion-input:focus, ion-select:focus {
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efecto de enfoque */
+}
+
+
+/* Cambiar el fondo del ion-menu completo */
+ion-menu#menu {
+    --background: #2c3e50; /* Color de fondo oscuro, que puede reflejar una atmósfera deportiva */
+}
+
+/* Cambiar el fondo del ion-header dentro del menú */
+ion-header {
+    --background: #34495e; /* Fondo más oscuro en el encabezado del menú */
+}
+
+ion-toolbar {
+    --background: #34495e; /* Fondo de la barra de herramientas */
+    --color: white; /* Color del texto */
+}
+
+ion-title {
+    --color: white; /* Título en blanco */
+}
+
+
+/* Centrar y estilizar el título en la pantalla */
+#tituloHome {
+    text-align: center; /* Centrar el texto */
+    font-size: 2.5rem; /* Aumentar el tamaño de la fuente */
+    color: #ffffff; /* Color blanco */
+    font-family: 'Arial', sans-serif; /* Tipografía moderna */
+    padding: 15px 0; /* Relleno arriba y abajo */
+    background-color:#34495e; /* Fondo verde para el encabezado */
+   
+    margin: 0; /* Eliminar márgenes */
+}
+
+/* Asegurar que el ion-toolbar se vea bien */
+ion-toolbar {
+    --background: #34495e; /* Fondo verde */
+    --color: white; /* Color del texto del toolbar */
+}
+
+

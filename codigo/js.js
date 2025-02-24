@@ -19,9 +19,9 @@ class UsuarioLoged
 
 class Actividad
 {
-    constructor(idRegistro,idUsuario,tiempo,fecha)
+    constructor(idActividad,idUsuario,tiempo,fecha)
     {
-        this.idRegistro = idRegistro
+        this.idActividad = idActividad
         this.idUsuario = idUsuario
         this.tiempo = tiempo
         this.fecha = fecha
@@ -38,7 +38,8 @@ const register = document.querySelector("#pantalla-register")
 const registerActivity = document.querySelector("#pantalla-registerAct")
 const listAct = document.querySelector("#pantalla-listAct")
 
-
+let actividades;
+let registrosUsuario;
 
 inicio()
 function inicio ()
@@ -51,6 +52,12 @@ function inicio ()
     document.querySelector("#btnMenuLogout").addEventListener("click", logout)
     chekearSesion()
     document.querySelector("#btnRegistrarActividad").addEventListener("click", previaRegistroActividad)
+    
+document.getElementById('slcFechas').addEventListener('ionChange', (event) => {
+    const selectedValue = event.detail.value;
+    filtrarRegistros(selectedValue);
+});
+
 }
 
 function chekearSesion() {
@@ -61,7 +68,7 @@ function chekearSesion() {
     if (apiKey && idUsuario) {
         mostrarMenuLogeado();
         cargarActividades();
-        previaListado(); // Cargar las actividades si la sesión está activa
+        previaListado(); 
     } else {
         mostrarMenuInicio();
     }
@@ -317,6 +324,7 @@ function mostrarMensaje(tipo, titulo, texto, duracion) {
     })
     .then(function(informacion){
         cargarSelectActividades(informacion.actividades)
+        actividades = informacion.actividades
     })
     .catch(function(error){
     console.log(error)
@@ -340,25 +348,25 @@ function mostrarMensaje(tipo, titulo, texto, duracion) {
 
 function previaRegistroActividad()
 {
-    let actividad = document.querySelector("#slcActividad").value
-    let usuario = localStorage.getItem("idUsuario")
+    let idRegistro = document.querySelector("#slcActividad").value
+    let idUsuario = localStorage.getItem("idUsuario")
     let tiempo = document.querySelector("#txtTiempo").value
     let fecha = document.querySelector("#txtFecha").value
 
-    let unaActividad = new Actividad(actividad, usuario, tiempo, fecha)
+    let unaActividad = new Actividad(idRegistro, idUsuario, tiempo, fecha)
 
     registrarActividad(unaActividad)
-}   
+}       
 
 
 function registrarActividad(unaActividad)
 {
-    fetch (`https://movetrack.develotion.com/registros.php`,{
+    fetch (`${URLBASE}registros.php`,{
         method:'POST',
         headers:{
         'Content-Type': 'application/json',
-        'iduser': localStorage.getItem("idUsuario"),
-        'apikey':localStorage.getItem("apiKey")
+        'apikey':localStorage.getItem("apiKey"),
+        'iduser': localStorage.getItem("idUsuario")
         },
         body: JSON.stringify(unaActividad)
         })
@@ -370,8 +378,6 @@ function registrarActividad(unaActividad)
             {
                 mostrarMensaje("SUCCESS", "Se ha agregado con éxtio", "Puede continuar usando la app", 2500)
                 previaListado()
-                hacerListado()
-                
                 ocultarPantallas()
                 listAct.style.display = "block";
             }
@@ -401,7 +407,8 @@ function previaListado()
         return response.json()
         })
         .then(function(informacion){
-            hacerListado(informacion.registros)    
+            hacerListado(informacion.registros)   
+            
         })
         .catch(function(error){
         console.log(error)
@@ -412,23 +419,37 @@ function previaListado()
 function hacerListado(registros)
 {
     let verActividades = ""
-
+    registrosUsuario  = registros
+   
     for(let a of registros)
     {
+       
         verActividades +=
             `<ion-item>
+                <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
                 <ion-label>
                     <h3>Id registro: ${a.id}</h3>
-                    <h3>Id actividad: ${a.idActividad}</h3>
+                    <h3>Actividad: ${obtenerNombreActividad(a.idActividad)}</h3>
                     <h3>Id usuario: ${a.idUsuario}</h3>
                     <h3>Tiempo: ${a.tiempo}</h3>
                     <h3>Fecha: ${a.fecha}</h3>
                 </ion-label>
+                
                 <ion-button id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
             </ion-item>`
     }
 
+    let tiempoTotal = 0;
+
+
+    registrosUsuario.forEach(function(registro) {
+    tiempoTotal += parseInt(registro.tiempo);  
+    });
+    document.querySelector("#tiempo").innerHTML = `${tiempoTotal} min`;
+
     document.querySelector("#divLista").innerHTML = verActividades
+
+    mostrarTiempoHoy()
 }
 
 document.querySelector("#btnRegistrarActividad").addEventListener("click", cerrar)
@@ -460,9 +481,9 @@ function eliminarActividad(idRegistro) {
     .then(function (informacion) {
         if (informacion.codigo > 199 && informacion.codigo < 300) {
             mostrarMensaje("SUCCESS", "Actividad eliminada con éxito", "Puede seguir usando la app", 2000);
-            previaListado() 
-            hacerListado();  
+            previaListado()   
             ocultarPantallas()
+            listAct.style.display = "block"
 
         } else {
             mostrarMensaje("ERROR", informacion.mensaje, "Intente de nuevo", 2000);
@@ -471,4 +492,102 @@ function eliminarActividad(idRegistro) {
     .catch(function (error) {
         console.log(error);
     });
+}
+
+
+
+function obtenerNombreActividad(idActividad)
+{
+    for(let unaA of actividades)
+    {
+        if(unaA.id == idActividad) return unaA.nombre
+    }
+}
+
+
+function obtetnerUrlImagenDeActividad(idActividad)
+{
+    for(let unaA of actividades)
+    {
+        if(unaA.id == idActividad) return url = "https://movetrack.develotion.com/imgs/"+ unaA.imagen + ".png"
+        
+    }
+}
+
+
+function filtrarRegistros(opcion) {
+    let fechaLimiteInicio;
+    let fechaLimiteFin;
+
+    const hoy = new Date();
+     if (opcion === "1") {
+        const fechaLimite = new Date(hoy);
+        fechaLimite.setDate(hoy.getDate() - 7); 
+
+        const registrosFiltrados = registrosUsuario.filter(registro => {
+            const fechaRegistro = new Date(registro.fecha);
+            return fechaRegistro >= fechaLimite;
+        });
+
+        mostrarListadoActividades(registrosFiltrados);
+        return;
+    }
+    else if (opcion === "2") {
+        fechaLimiteInicio = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
+        
+
+        fechaLimiteFin = new Date(hoy.getFullYear(), hoy.getMonth(), 0);
+
+        const registrosFiltrados = registrosUsuario.filter(registro => {
+            const fechaRegistro = new Date(registro.fecha);
+            return fechaRegistro >= fechaLimiteInicio && fechaRegistro <= fechaLimiteFin;
+        });
+
+        mostrarListadoActividades(registrosFiltrados);
+        return;
+    }  else {
+
+        mostrarListadoActividades(registrosUsuario);
+        return;
+    }
+}
+
+function mostrarListadoActividades(registros) {
+    let verActividades = "";
+    for (let a of registros) {
+        verActividades += `
+            <ion-item>
+                <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
+                <ion-label>
+                    <h3>Id registro: ${a.id}</h3>
+                    <h3>Actividad: ${obtenerNombreActividad(a.idActividad)}</h3>
+                    <h3>Id usuario: ${a.idUsuario}</h3>
+                    <h3>Tiempo: ${a.tiempo}</h3>
+                    <h3>Fecha: ${a.fecha}</h3>
+                </ion-label>
+                <ion-button id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
+            </ion-item>
+        `;
+    }
+
+    document.querySelector("#divLista").innerHTML = verActividades;
+
+
+    
+}
+
+
+function mostrarTiempoHoy() {
+    const hoy = new Date(); 
+    const fechaHoy = hoy.toISOString().split('T')[0]; 
+
+    let tiempoHoy = 0;
+
+    registrosUsuario.forEach(registro => {
+        if (registro.fecha === fechaHoy) {
+            tiempoHoy += parseInt(registro.tiempo); 
+        }
+    });
+
+    document.querySelector("#tiempoHoy").innerHTML = `${tiempoHoy} min`;
 }

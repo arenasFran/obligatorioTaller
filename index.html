@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css">
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="style/style.css">
     
 </head>
 <body>
@@ -25,7 +26,7 @@
         <!-- Menu -->
         <ion-menu content-id="main-content" id="menu">
             <ion-header>
-              <ion-toolbar color="success">
+              <ion-toolbar>
                 <ion-title>Seleccione una opción</ion-title>
               </ion-toolbar>
             </ion-header>
@@ -36,7 +37,7 @@
                 <ion-item href="/register" onclick="cerrarMenu()" id="btnMenuRegistrar"><ion-label>Registrarse</ion-label></ion-item>
                 <ion-item href="/registrarEjercicio" onclick="cerrarMenu()" id="btnMenuRegistrarEjercicio"><ion-label>Registrar ejercicio</ion-label></ion-item>
                 <ion-item href="/listAct" onclick="cerrarMenu()" id="btnListadoAct"><ion-label>Listado de actividades</ion-label></ion-item>
-                <ion-item href="/home" onclick="cerrarMenu()" id="btnMenuLogout"><ion-label>Cerrar sesión</ion-label></ion-item>
+                <ion-item href="/" onclick="cerrarMenu()" id="btnMenuLogout"><ion-label>Cerrar sesión</ion-label></ion-item>
             </ion-content>
     
           </ion-menu>
@@ -101,9 +102,9 @@
                     <ion-input label="Contraseña" type="password"  id="txtContraseña"></ion-input>
                   </ion-item>
     
-                <ion-item>
+               
                     <ion-button id="btnLogin">Logearse</ion-input>
-                </ion-item>
+              
     
     
             </ion-content>
@@ -127,7 +128,7 @@
             <ion-content class="ion-padding">
                 <ion-item>
                     <ion-label>
-                        <h2>REGISTRAR USUARIO</h2>
+                        <h2>Registrar usuario</h2>
                     </ion-label>
                 </ion-item>
     
@@ -144,9 +145,9 @@
                       <ion-select label="Nacionalidad" placeholder="Seleccione el país" id="slcPaises">
                       </ion-select>
                     </ion-item>
-                <ion-item>
+               
                     <ion-button id="btnRegistrar">Registrar</ion-input>
-                </ion-item>
+             
     
 
               
@@ -171,6 +172,7 @@
 
         <ion-content class="ion-padding">
 
+            
             <ion-item>
                 <ion-select label="Actividad" placeholder="Seleccione la actividad" id="slcActividad">
                 </ion-select>
@@ -199,7 +201,32 @@
         </ion-header>
 
         <ion-content class="ion-padding">
+            <ion-item>
+                <ion-label>
+                  <h2>Tiempo Total</h2>
+                </ion-label>
+                <ion-badge color="primary" id="tiempo"></ion-badge>
+              </ion-item>
 
+              <ion-item>
+                <ion-label>
+                  <h2>Tiempo de hoy</h2>
+                </ion-label>
+                <ion-badge color="primary" id="tiempoHoy"></ion-badge>
+              </ion-item>
+              
+            <h5>Filtrar por fecha</h5>
+    
+          <ion-list>
+                <ion-item>
+                  <ion-select aria-label="Fecha" interface="action-sheet" placeholder="Seleccione la fecha" id="slcFechas">
+                    <ion-select-option value="1">Última semana</ion-select-option>
+                    <ion-select-option value="2">Último mes</ion-select-option>
+                    <ion-select-option value="3">Todos los entrenamientos</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-list>
+            
             <div id="divLista"></div>
     
         </ion-content>
