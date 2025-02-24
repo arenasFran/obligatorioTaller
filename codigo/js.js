@@ -556,24 +556,21 @@ function mostrarListadoActividades(registros) {
     let verActividades = "";
     for (let a of registros) {
         verActividades += `
-            <ion-item>
-                <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
-                <ion-label>
-                    <h3>Id registro: ${a.id}</h3>
-                    <h3>Actividad: ${obtenerNombreActividad(a.idActividad)}</h3>
-                    <h3>Id usuario: ${a.idUsuario}</h3>
-                    <h3>Tiempo: ${a.tiempo}</h3>
-                    <h3>Fecha: ${a.fecha}</h3>
-                </ion-label>
-                <ion-button id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
-            </ion-item>
+           <ion-item class="actividad-item">
+    <ion-img src="${obtenerUrlImagenDeActividad(a.idActividad)}"></ion-img>
+    <ion-label class="actividad-label">
+        <h3 class="actividad-titulo">Id registro: <span class="actividad-texto">${a.id}</span></h3>
+        <h3 class="actividad-titulo">Actividad: <span class="actividad-texto">${obtenerNombreActividad(a.idActividad)}</span></h3>
+        <h3 class="actividad-titulo">Id usuario: <span class="actividad-texto">${a.idUsuario}</span></h3>
+        <h3 class="actividad-titulo">Tiempo: <span class="actividad-texto">${a.tiempo}</span></h3>
+        <h3 class="actividad-titulo">Fecha: <span class="actividad-texto">${a.fecha}</span></h3>
+    </ion-label>
+    <ion-button class="btn-eliminar" id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
+</ion-item>
         `;
     }
 
     document.querySelector("#divLista").innerHTML = verActividades;
-
-
-    
 }
 
 
@@ -591,3 +588,16 @@ function mostrarTiempoHoy() {
 
     document.querySelector("#tiempoHoy").innerHTML = `${tiempoHoy} min`;
 }
+
+
+
+
+// capear la fecha 
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const today = new Date().toISOString().split('T')[0]; 
+    
+    // Asignar la fecha actual al atributo max
+    document.getElementById('txtFecha').setAttribute('max', today);
+  });
+

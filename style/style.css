@@ -1,83 +1,82 @@
-/* Fondo general y texto */
+
 body {
-    color: #2f3640; /* Texto oscuro para contraste y legibilidad */
+    color: #2f3640; 
     font-family: 'Roboto', sans-serif;
 }
 
 /* Botones personalizados */
 ion-button {
-    --background: #ff7f50; /* Naranja vibrante (energía y acción) */
+    --background: #ff7f50; 
     --color: white;
-    --border-radius: 30px; /* Bordes redondeados */
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    --border-radius: 30px; 
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 ion-button:hover {
-    transform: translateY(-4px); /* Desplazamiento sutil en hover */
-    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Sombra más intensa */
+    transform: translateY(-4px); 
+    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); 
 }
 
 /* Estilos para el encabezado */
 ion-header {
-    background-color: #2980b9; /* Azul fuerte y moderno */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Sombra moderna */
+    background-color: #34495e; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); 
     padding: 10px 0;
 }
 
 
 
-/* Estilos para los items en el menú */
+
 ion-item {
-    --background: #fff; /* Fondo blanco para claridad */
-    --color: #2f3640; /* Texto oscuro para contraste */
+    --background: #fff; 
+    --color: #2f3640; 
     border-radius: 8px;
     margin: 8px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
     transition: transform 0.2s ease-in-out;
 }
 
 ion-item:hover {
-    transform: translateX(5px); /* Efecto de desplazamiento */
-    background-color: #ecf0f1; /* Fondo gris claro en hover */
+    transform: translateX(5px); 
+    background-color: #ecf0f1; 
 }
 
-/* Estilo para los badges */
 ion-badge {
-    background-color: #1abc9c; /* Verde brillante (salud y deporte) */
+    background-color: #1abc9c; 
     color: white;
     font-weight: bold;
     padding: 6px 12px;
-    border-radius: 25px; /* Bordes redondeados */
+    border-radius: 25px;
 }
 
-/* Tarjetas personalizadas */
+
 ion-card {
     --background: #fff;
     --border-radius: 12px;
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra ligera y moderna */
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     transition: transform 0.3s ease;
 }
 
 ion-card:hover {
-    transform: translateY(-5px); /* Efecto de desplazamiento en hover */
-    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más fuerte */
+    transform: translateY(-5px); 
+    --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
 }
 
-/* Estilo para las imágenes */
+
 ion-img {
-    border-radius: 12px 12px 0 0; /* Bordes redondeados arriba */
+    border-radius: 12px 12px 0 0; 
 }
 
-/* Fondo personalizado para el contenido */
+
 ion-content {
-    background-color: #ecf0f1; /* Gris muy suave */
+    background-color: #ecf0f1; 
     border-radius: 8px;
     padding: 20px;
 }
 
-/* Input y Select personalizados */
+
 ion-input, ion-select {
     --background: #fff;
     --border-radius: 8px;
@@ -88,46 +87,124 @@ ion-input, ion-select {
 }
 
 ion-input:focus, ion-select:focus {
-    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efecto de enfoque */
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 
-/* Cambiar el fondo del ion-menu completo */
+
 ion-menu#menu {
-    --background: #2c3e50; /* Color de fondo oscuro, que puede reflejar una atmósfera deportiva */
+    --background: #2c3e50; 
 }
 
-/* Cambiar el fondo del ion-header dentro del menú */
+
 ion-header {
-    --background: #34495e; /* Fondo más oscuro en el encabezado del menú */
+    --background: #34495e; 
 }
 
 ion-toolbar {
-    --background: #34495e; /* Fondo de la barra de herramientas */
-    --color: white; /* Color del texto */
+    --background: #34495e; 
+    --color: white; 
 }
 
 ion-title {
-    --color: white; /* Título en blanco */
+    --color: white; 
 }
 
 
-/* Centrar y estilizar el título en la pantalla */
+
 #tituloHome {
-    text-align: center; /* Centrar el texto */
-    font-size: 2.5rem; /* Aumentar el tamaño de la fuente */
-    color: #ffffff; /* Color blanco */
-    font-family: 'Arial', sans-serif; /* Tipografía moderna */
-    padding: 15px 0; /* Relleno arriba y abajo */
-    background-color:#34495e; /* Fondo verde para el encabezado */
+    text-align: center; 
+    font-size: 2.5rem; 
+    color: #ffffff; 
+    font-family: 'Arial', sans-serif; 
+    padding: 15px 0; 
+    background-color:#34495e; 
    
-    margin: 0; /* Eliminar márgenes */
+    margin: 0; 
 }
 
-/* Asegurar que el ion-toolbar se vea bien */
+
 ion-toolbar {
-    --background: #34495e; /* Fondo verde */
-    --color: white; /* Color del texto del toolbar */
+    --background: #34495e; 
+    --color: white; 
 }
 
 
+
+
+.titulo-login,
+.titulo-register {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    color: white; 
+    padding-top: 20px;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.titulo-form {
+    font-family: 'Verdana', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    padding-bottom: 10px;
+}
+
+.actividad-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    background-color: #f9f9f9; 
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen de la actividad */
+.actividad-item ion-img {
+    border-radius: 8px;
+    max-width: 60px;
+    margin-right: 10px;
+}
+
+
+.actividad-label {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.actividad-titulo {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+
+.actividad-texto {
+    font-size: 1em;
+    color: #666;
+}
+
+
+.btn-eliminar {
+    background-color: #e74c3c;/
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    border: none;
+}
+
+.btn-eliminar:hover {
+    background-color: #c0392b; 
+}
