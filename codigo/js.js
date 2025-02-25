@@ -37,9 +37,13 @@ const login = document.querySelector("#pantalla-login")
 const register = document.querySelector("#pantalla-register")
 const registerActivity = document.querySelector("#pantalla-registerAct")
 const listAct = document.querySelector("#pantalla-listAct")
+const mapa = document.querySelector("#pantalla-mapa")
 
 let actividades;
 let registrosUsuario;
+let map;
+let paises;
+let listaUsuariosPorPaises;
 
 inicio()
 function inicio ()
@@ -57,7 +61,6 @@ document.getElementById('slcFechas').addEventListener('ionChange', (event) => {
     const selectedValue = event.detail.value;
     filtrarRegistros(selectedValue);
 });
-
 }
 
 function chekearSesion() {
@@ -69,6 +72,8 @@ function chekearSesion() {
         mostrarMenuLogeado();
         cargarActividades();
         previaListado(); 
+        obtenerUsuariosConectados()
+       
     } else {
         mostrarMenuInicio();
     }
@@ -90,6 +95,7 @@ function navegar(evt)
     if(destino == "/register") register.style.display = "block"
     if(destino == "/registrarEjercicio") registerActivity.style.display = "block"
     if(destino == "/listAct") listAct.style.display = "block"
+    if(destino == "/mapa") mapa.style.display = "block"
 }
 
 
@@ -100,6 +106,8 @@ function ocultarPantallas()
     register.style.display = "none"
     registerActivity.style.display="none"
     listAct.style.display="none"
+    mapa.style.display="none"
+    
 }
 
 
@@ -212,12 +220,15 @@ function ocultarMenu()
     document.querySelector("#btnMenuLogout").style.display= "none"
     document.querySelector("#btnMenuRegistrarEjercicio").style.display= "none"
     document.querySelector("#btnListadoAct").style.display= "none"
+    document.querySelector("#btnMapa").style.display= "none"
+    
 }
 
 function mostrarMenuInicio()
 {
     document.querySelector("#btnMenuLogin").style.display= "block"
     document.querySelector("#btnMenuRegistrar").style.display= "block"
+    
 }
 
 
@@ -226,7 +237,8 @@ function mostrarMenuLogeado()
 {
     document.querySelector("#btnMenuRegistrarEjercicio").style.display= "block"
     document.querySelector("#btnMenuLogout").style.display= "block"
-    document.querySelector("#btnListadoAct").style.display = "block "
+    document.querySelector("#btnListadoAct").style.display = "block"
+    document.querySelector("#btnMapa").style.display= "block"
  
 }
 
@@ -242,7 +254,8 @@ function logout()
     mostrarMensaje("SUCCESS", "Se ha cerrado sesión","Que tenga un buen dia", 2000)
 }
 
-function mostrarMensaje(tipo, titulo, texto, duracion) {
+function mostrarMensaje(tipo, titulo, texto, duracion) 
+{
     const toast = document.createElement('ion-toast');
     toast.header = titulo;
     toast.message = texto;
@@ -262,18 +275,19 @@ function mostrarMensaje(tipo, titulo, texto, duracion) {
     }
     document.body.appendChild(toast);
     toast.present();
-    }
+}
 
 
 
 
-    function cargarPaises()
-    {
+function cargarPaises()
+{
         obtenerPaises()
-    }
+        
+}
 
 
-    function obtenerPaises()
+ function obtenerPaises()
     {
 
         fetch (`${URLBASE}paises.php`)
@@ -282,15 +296,19 @@ function mostrarMensaje(tipo, titulo, texto, duracion) {
             })
             .then(function(informacion){
                cargarSelectPaises(informacion.paises)
+               paises = informacion.paises
+              
             })
             .catch(function(error){
             console.log(error)
             })
+
+            
     
     }
 
 
-    function cargarSelectPaises(listaPaises)
+ function cargarSelectPaises(listaPaises)
     {
         let miSelect = ""
         for(let unP of listaPaises)
@@ -408,11 +426,14 @@ function previaListado()
         })
         .then(function(informacion){
             hacerListado(informacion.registros)   
+            armarMapa()
+            
             
         })
         .catch(function(error){
         console.log(error)
         })
+        
 }
 
 
@@ -450,6 +471,9 @@ function hacerListado(registros)
     document.querySelector("#divLista").innerHTML = verActividades
 
     mostrarTiempoHoy()
+   
+    
+    
 }
 
 document.querySelector("#btnRegistrarActividad").addEventListener("click", cerrar)
@@ -514,7 +538,7 @@ function obtetnerUrlImagenDeActividad(idActividad)
     }
 }
 
-
+    //filtrar los registros por fecha//
 function filtrarRegistros(opcion) {
     let fechaLimiteInicio;
     let fechaLimiteFin;
@@ -556,9 +580,9 @@ function mostrarListadoActividades(registros) {
     let verActividades = "";
     for (let a of registros) {
         verActividades += `
-           <ion-item class="actividad-item">
-    <ion-img src="${obtenerUrlImagenDeActividad(a.idActividad)}"></ion-img>
-    <ion-label class="actividad-label">
+            <ion-item class="actividad-item">
+            <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
+        <ion-label class="actividad-label">
         <h3 class="actividad-titulo">Id registro: <span class="actividad-texto">${a.id}</span></h3>
         <h3 class="actividad-titulo">Actividad: <span class="actividad-texto">${obtenerNombreActividad(a.idActividad)}</span></h3>
         <h3 class="actividad-titulo">Id usuario: <span class="actividad-texto">${a.idUsuario}</span></h3>
@@ -566,14 +590,14 @@ function mostrarListadoActividades(registros) {
         <h3 class="actividad-titulo">Fecha: <span class="actividad-texto">${a.fecha}</span></h3>
     </ion-label>
     <ion-button class="btn-eliminar" id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
-</ion-item>
+    </ion-item>
         `;
     }
 
     document.querySelector("#divLista").innerHTML = verActividades;
 }
 
-
+//funcion para mostrar el tiempo de entrenamiento en minutos hoy
 function mostrarTiempoHoy() {
     const hoy = new Date(); 
     const fechaHoy = hoy.toISOString().split('T')[0]; 
@@ -601,3 +625,59 @@ function mostrarTiempoHoy() {
     document.getElementById('txtFecha').setAttribute('max', today);
   });
 
+
+
+
+
+function obtenerUsuariosConectados()
+{
+    fetch (`${URLBASE}usuariosPorPais.php`,{
+        method:"GET",
+        headers:{
+        'Content-Type': 'application/json',
+        'apikey':localStorage.getItem("apiKey"),
+        'iduser': localStorage.getItem("idUsuario")
+        },
+        })
+        .then(function (response){
+        return response.json()
+        })
+        .then(function(informacion){
+            listaUsuariosPorPaises= informacion.paises
+            
+        })
+        .catch(function(error){
+        console.log(error)
+     })
+}
+
+
+
+
+function armarMapa()
+{
+    
+    map = L.map('map').setView([-34.4736, -57.8458], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 3,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+
+    for(let unP of paises){
+        
+        marker = L.marker([unP.latitude,unP.longitude]).addTo(map);
+        marker.bindPopup(`${unP.name} ${(obtenerCantidadUsuariosPorPais(unP.id))} usuarios `).openPopup();
+        
+    }
+    
+}
+
+
+function obtenerCantidadUsuariosPorPais(id)
+{
+    for(unP of listaUsuariosPorPaises)
+    {
+        if(unP.id == id) return unP.cantidadDeUsuarios
+    }
+}

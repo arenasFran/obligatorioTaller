@@ -195,8 +195,8 @@ ion-toolbar {
 
 
 .btn-eliminar {
-    background-color: #e74c3c;/
-    color: white;
+    background-color: #e74c3c;
+    color: #ffff;
     font-weight: bold;
     border-radius: 8px;
     padding: 10px 15px;
@@ -207,4 +207,11 @@ ion-toolbar {
 
 .btn-eliminar:hover {
     background-color: #c0392b; 
+}
+
+
+#map
+{
+ height: 600px;
+ width: 300px;
 }
