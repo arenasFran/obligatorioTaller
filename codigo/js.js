@@ -1,3 +1,16 @@
+document.addEventListener('touchmove', function(event) {
+    if (event.cancelable) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector("#btnMostrarMapa").addEventListener("click", armarMapa);
+});
+
+
+
+
 class Usuario
 {
     constructor(usuario, password, Idpais)
@@ -39,12 +52,15 @@ const registerActivity = document.querySelector("#pantalla-registerAct")
 const listAct = document.querySelector("#pantalla-listAct")
 const mapa = document.querySelector("#pantalla-mapa")
 
+
+
+
 let actividades;
 let registrosUsuario;
 let map;
 let paises;
 let listaUsuariosPorPaises;
-
+let botonEntrenamiento = document.querySelector("#btnAgregarEntrenamiento")
 inicio()
 function inicio ()
 {
@@ -57,7 +73,7 @@ function inicio ()
     chekearSesion()
     document.querySelector("#btnRegistrarActividad").addEventListener("click", previaRegistroActividad)
     
-document.getElementById('slcFechas').addEventListener('ionChange', (event) => {
+    document.getElementById('slcFechas').addEventListener('ionChange', (event) => {
     const selectedValue = event.detail.value;
     filtrarRegistros(selectedValue);
 });
@@ -72,10 +88,14 @@ function chekearSesion() {
         mostrarMenuLogeado();
         cargarActividades();
         previaListado(); 
-        obtenerUsuariosConectados()
+
+        
+        
        
     } else {
         mostrarMenuInicio();
+      
+        
     }
 }
 
@@ -126,40 +146,37 @@ function previaRegistroUsuario()
 }
 
 
-function hacerRegistroUsuario(nuevoUsuario)
-{
-    fetch (`${URLBASE}usuarios.php`,{
-        method:'POST',
-        headers:{
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nuevoUsuario)
-        })
-        .then(function (response){
-        return response.json()
-        })
-        .then(function(informacion){
-            if(informacion.codigo == 200)
-            {
-                mostrarMensaje("SUCCESS", "Registro exitoso", "Puedes usar la App", 2500)
-                ocultarPantallas()
-                home.style.display = "block"
-                localStorage.setItem("idUsuario",informacion.id)
-                localStorage.setItem("apiKey", informacion.apiKey)
-                ocultarMenu()
-                mostrarMenuLogeado()  
-                cargarActividades()
-                previaListado()
-            }
-            else{
-                mostrarMensaje("ERROR", informacion.mensaje, "Verifique los datos", 2500)
-            }
-          
-        })
-        .catch(function(error){
-        console.log(error)
-        })
+async function hacerRegistroUsuario(nuevoUsuario) {
+    try {
+        const response = await fetch(`${URLBASE}usuarios.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(nuevoUsuario),
+        });
+
+        const informacion = await response.json();
+
+        if (informacion.codigo === 200) {
+            mostrarMensaje("SUCCESS", "Registro exitoso", "Puedes usar la App", 2500);
+            ocultarPantallas();
+            home.style.display = "block";
+            localStorage.setItem("idUsuario", informacion.id);
+            localStorage.setItem("apiKey", informacion.apiKey);
+            ocultarMenu();
+            mostrarMenuLogeado();
+            await cargarActividades(); 
+            await previaListado(); 
+        } else {
+            mostrarMensaje("ERROR", informacion.mensaje, "Verifique los datos", 2500);
+        }
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje("ERROR", "Ocurrió un error al registrar el usuario", error.message, 2500);
+    }
 }
+
 
 
 function previaLogin()
@@ -174,44 +191,36 @@ function previaLogin()
 
 
 
-function hacerLogin(nuevoUsuario)
-{
-    fetch (`${URLBASE}login.php`,{
-        method:'POST',
-        headers:{
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nuevoUsuario)
-        })
-        .then(function (response){
-        return response.json()
-        })
-        .then(function(informacion){
-        if(informacion.codigo == 200)
-            {
-                mostrarMensaje("SUCCESS", "Login exitoso", "Puedes usar la App", 3000)
-                ocultarPantallas()
-                home.style.display = "block"
-                localStorage.setItem("idUsuario",informacion.id)
-                localStorage.setItem("apiKey", informacion.apiKey)
-                ocultarMenu()
-                mostrarMenuLogeado()  
-                cargarActividades() 
-                previaListado()
-            }
-            else
-            {
-                mostrarMensaje("ERROR", informacion.mensaje, "Verifique sus datos", 2500)
-            }
- 
-        })
-        .catch(function(error){
-        console.log(error)
-        })
+async function hacerLogin(nuevoUsuario) {
+    try {
+        const response = await fetch(`${URLBASE}login.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(nuevoUsuario),
+        });
 
-       
+        const informacion = await response.json();
+
+        if (informacion.codigo === 200) {
+            mostrarMensaje("SUCCESS", "Login exitoso", "Puedes usar la App", 3000);
+            ocultarPantallas();
+            home.style.display = "block";
+            localStorage.setItem("idUsuario", informacion.id);
+            localStorage.setItem("apiKey", informacion.apiKey);
+            ocultarMenu();
+            mostrarMenuLogeado();
+            cargarActividades();
+            previaListado(); 
+            obtenerUsuariosConectados()
+        } else {
+            mostrarMensaje("ERROR", informacion.mensaje, "Verifique sus datos", 2500);
+        }
+    } catch (error) {
+        console.error(error);
+    }
 }
-
 
 function ocultarMenu()
 {
@@ -287,25 +296,17 @@ function cargarPaises()
 }
 
 
- function obtenerPaises()
-    {
-
-        fetch (`${URLBASE}paises.php`)
-            .then(function (response){
-            return response.json()
-            })
-            .then(function(informacion){
-               cargarSelectPaises(informacion.paises)
-               paises = informacion.paises
-              
-            })
-            .catch(function(error){
-            console.log(error)
-            })
-
-            
-    
+async function obtenerPaises() {
+    try {
+        const response = await fetch(`${URLBASE}paises.php`);
+        const informacion = await response.json();
+        cargarSelectPaises(informacion.paises);
+        paises = informacion.paises;
+    } catch (error) {
+        console.error(error);
     }
+}
+
 
 
  function cargarSelectPaises(listaPaises)
@@ -326,29 +327,23 @@ function cargarPaises()
     obtenerActividades()
   }
 
-  function obtenerActividades()
-  {
-    
-  fetch (`https://movetrack.develotion.com/actividades.php`,{
-    method:'GET',
-    headers:{
-    'Content-Type': 'application/json',
-    'iduser': localStorage.getItem("idUsuario"),
-    'apikey':localStorage.getItem("apiKey")
-    },
-    })
-    .then(function (response){
-    return response.json()
-    })
-    .then(function(informacion){
-        cargarSelectActividades(informacion.actividades)
-        actividades = informacion.actividades
-    })
-    .catch(function(error){
-    console.log(error)
-    })
-
-  }
+  async function obtenerActividades() {
+    try {
+        const response = await fetch(`${URLBASE}actividades.php`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'iduser': localStorage.getItem("idUsuario"),
+                'apikey': localStorage.getItem("apiKey"),
+            },
+        });
+        const informacion = await response.json();
+        cargarSelectActividades(informacion.actividades);
+        actividades = informacion.actividades;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
   function cargarSelectActividades(listaActividades)
@@ -426,7 +421,7 @@ function previaListado()
         })
         .then(function(informacion){
             hacerListado(informacion.registros)   
-            armarMapa()
+        
             
             
         })
@@ -445,19 +440,19 @@ function hacerListado(registros)
     for(let a of registros)
     {
        
-        verActividades +=
-            `<ion-item>
-                <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
-                <ion-label>
-                    <h3>Id registro: ${a.id}</h3>
-                    <h3>Actividad: ${obtenerNombreActividad(a.idActividad)}</h3>
-                    <h3>Id usuario: ${a.idUsuario}</h3>
-                    <h3>Tiempo: ${a.tiempo}</h3>
-                    <h3>Fecha: ${a.fecha}</h3>
-                </ion-label>
-                
-                <ion-button id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
-            </ion-item>`
+        verActividades += `
+        <ion-item class="actividad-item">
+        <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
+    <ion-label class="actividad-label">
+        <p class="actividad-titulo">Id registro: <span class="actividad-texto">${a.id}</span></p>
+        <p class="actividad-titulo">Actividad: <span class="actividad-texto">${obtenerNombreActividad(a.idActividad)}</span></h6>
+        <p class="actividad-titulo">Id usuario: <span class="actividad-texto">${a.idUsuario}</span></p>
+        <p class="actividad-titulo">Tiempo: <span class="actividad-texto">${a.tiempo} min</span></p>
+        <p class="actividad-titulo">Fecha: <span class="actividad-texto">${a.fecha}</span></p>
+</ion-label>
+<ion-button class="btn-eliminar" id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
+</ion-item>
+    `;
     }
 
     let tiempoTotal = 0;
@@ -539,42 +534,31 @@ function obtetnerUrlImagenDeActividad(idActividad)
 }
 
     //filtrar los registros por fecha//
-function filtrarRegistros(opcion) {
-    let fechaLimiteInicio;
-    let fechaLimiteFin;
-
-    const hoy = new Date();
-     if (opcion === "1") {
-        const fechaLimite = new Date(hoy);
-        fechaLimite.setDate(hoy.getDate() - 7); 
-
-        const registrosFiltrados = registrosUsuario.filter(registro => {
-            const fechaRegistro = new Date(registro.fecha);
-            return fechaRegistro >= fechaLimite;
-        });
-
-        mostrarListadoActividades(registrosFiltrados);
-        return;
+    function filtrarRegistros(opcion) {
+        const hoy = new Date();
+        let fechaLimiteInicio, fechaLimiteFin;
+    
+        switch (opcion) {
+            case "1":
+                const fechaLimite = new Date(hoy);
+                fechaLimite.setDate(hoy.getDate() - 7); 
+                mostrarListadoActividades(registrosUsuario.filter(registro => {
+                    return new Date(registro.fecha) >= fechaLimite;
+                }));
+                break;
+            case "2":
+                fechaLimiteInicio = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
+                fechaLimiteFin = new Date(hoy.getFullYear(), hoy.getMonth(), 0);
+                mostrarListadoActividades(registrosUsuario.filter(registro => {
+                    const fechaRegistro = new Date(registro.fecha);
+                    return fechaRegistro >= fechaLimiteInicio && fechaRegistro <= fechaLimiteFin;
+                }));
+                break;
+            default:
+                mostrarListadoActividades(registrosUsuario);
+        }
     }
-    else if (opcion === "2") {
-        fechaLimiteInicio = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
-        
-
-        fechaLimiteFin = new Date(hoy.getFullYear(), hoy.getMonth(), 0);
-
-        const registrosFiltrados = registrosUsuario.filter(registro => {
-            const fechaRegistro = new Date(registro.fecha);
-            return fechaRegistro >= fechaLimiteInicio && fechaRegistro <= fechaLimiteFin;
-        });
-
-        mostrarListadoActividades(registrosFiltrados);
-        return;
-    }  else {
-
-        mostrarListadoActividades(registrosUsuario);
-        return;
-    }
-}
+    
 
 function mostrarListadoActividades(registros) {
     let verActividades = "";
@@ -583,11 +567,11 @@ function mostrarListadoActividades(registros) {
             <ion-item class="actividad-item">
             <ion-img src="${obtetnerUrlImagenDeActividad(a.idActividad)}"></ion-img>
         <ion-label class="actividad-label">
-        <h3 class="actividad-titulo">Id registro: <span class="actividad-texto">${a.id}</span></h3>
-        <h3 class="actividad-titulo">Actividad: <span class="actividad-texto">${obtenerNombreActividad(a.idActividad)}</span></h3>
-        <h3 class="actividad-titulo">Id usuario: <span class="actividad-texto">${a.idUsuario}</span></h3>
-        <h3 class="actividad-titulo">Tiempo: <span class="actividad-texto">${a.tiempo}</span></h3>
-        <h3 class="actividad-titulo">Fecha: <span class="actividad-texto">${a.fecha}</span></h3>
+        <p class="actividad-titulo">Id registro: <span class="actividad-texto">${a.id}</span></p>
+        <p class="actividad-titulo">Actividad: <span class="actividad-texto">${obtenerNombreActividad(a.idActividad)}</span></h6>
+        <p class="actividad-titulo">Id usuario: <span class="actividad-texto">${a.idUsuario}</span></p>
+        <p class="actividad-titulo">Tiempo: <span class="actividad-texto">${a.tiempo} min</span></p>
+        <p class="actividad-titulo">Fecha: <span class="actividad-texto">${a.fecha}</span></p>
     </ion-label>
     <ion-button class="btn-eliminar" id="idbtnn" onclick="eliminarActividad(${a.id})">Eliminar</ion-button>
     </ion-item>
@@ -629,8 +613,7 @@ function mostrarTiempoHoy() {
 
 
 
-function obtenerUsuariosConectados()
-{
+   function obtenerUsuariosConectados() {
     fetch (`${URLBASE}usuariosPorPais.php`,{
         method:"GET",
         headers:{
@@ -643,12 +626,13 @@ function obtenerUsuariosConectados()
         return response.json()
         })
         .then(function(informacion){
-            listaUsuariosPorPaises= informacion.paises
+            listaUsuariosPorPaises = informacion.paises
+            
             
         })
         .catch(function(error){
         console.log(error)
-     })
+        })
 }
 
 
@@ -656,7 +640,10 @@ function obtenerUsuariosConectados()
 
 function armarMapa()
 {
-    
+   
+    if (map) {
+        map.remove();
+    }
     map = L.map('map').setView([-34.4736, -57.8458], 13);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 3,
@@ -667,9 +654,11 @@ function armarMapa()
     for(let unP of paises){
         
         marker = L.marker([unP.latitude,unP.longitude]).addTo(map);
-        marker.bindPopup(`${unP.name} ${(obtenerCantidadUsuariosPorPais(unP.id))} usuarios `).openPopup();
+        marker.bindPopup(`${unP.name} ${(setTimeout(obtenerCantidadUsuariosPorPais(unP.id)),2000)} usuarios `).openPopup();
         
     }
+
+    
     
 }
 
@@ -681,3 +670,4 @@ function obtenerCantidadUsuariosPorPais(id)
         if(unP.id == id) return unP.cantidadDeUsuarios
     }
 }
+

@@ -79,12 +79,13 @@
             <ion-content class="ion-padding">
 
                 <ion-img src="assets/hero.png"></ion-img>
+
             </ion-content>
             
           </page-home>
     
     
-          <!-- Login -->
+   
     
         <!-- Login -->
 <page-login class="ion-page" id="pantalla-login">
@@ -205,7 +206,7 @@
                 <ion-badge color="primary" id="tiempoHoy"></ion-badge>
               </ion-item>
               
-            <h5>Filtrar por fecha</h5>
+            <h5 class="titulo-fecha">Filtrar por fecha</h5>
     
           <ion-list>
                 <ion-item>
@@ -224,6 +225,7 @@
       </page-listAct>
 
 
+      <!-- Mapa -->
 
       <page-mapa class="ion-page" id="pantalla-mapa">
         <ion-header class="headerHome">
@@ -236,7 +238,7 @@
         </ion-header>
 
         <ion-content class="ion-padding">
-          
+          <ion-button id="btnMostrarMapa">Mostrar Mapa</ion-button>
           <div id="map"></div>
     
         </ion-content>
