@@ -73,6 +73,7 @@ function inicio ()
     chekearSesion()
     document.querySelector("#btnRegistrarActividad").addEventListener("click", previaRegistroActividad)
     
+    //cuando se cambia el select de fecha se lanza la logica de filtrar por fechas
     document.getElementById('slcFechas').addEventListener('ionChange', (event) => {
     const selectedValue = event.detail.value;
     filtrarRegistros(selectedValue);
@@ -560,7 +561,8 @@ function obtetnerUrlImagenDeActividad(idActividad)
     }
     
 
-function mostrarListadoActividades(registros) {
+function mostrarListadoActividades(registros)
+{
     let verActividades = "";
     for (let a of registros) {
         verActividades += `
@@ -654,7 +656,7 @@ function armarMapa()
     for(let unP of paises){
         
         marker = L.marker([unP.latitude,unP.longitude]).addTo(map);
-        marker.bindPopup(`${unP.name} ${(setTimeout(obtenerCantidadUsuariosPorPais(unP.id)),2000)} usuarios `).openPopup();
+        marker.bindPopup(`${unP.name} ${obtenerCantidadUsuariosPorPais(unP.id)} usuarios `).openPopup();
         
     }
 
